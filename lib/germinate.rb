@@ -1,0 +1,1 @@
+require 'germinate/seed'

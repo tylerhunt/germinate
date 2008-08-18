@@ -1,0 +1,61 @@
+Germinate
+=========
+
+Seeds are like migrations, but for your data. They makes it easy to populate
+the database of a Rails application with default data.
+
+There are three methods by which seed data may be generated: create, update,
+and create_or_update. Each of these works by specifying a key that's used to
+identify a record. In the case of create the key will be used to ensure that
+the record doesn't already exist in the database. For update and
+create_or_update it's used to locate the record to be updated.
+
+Keys are specified as method calls, with values being passed to the methods as
+arguments. For an ID of 1, use id(1). For a state and abbreviation, use
+state_and_abbreviation('FL', 'Florida').
+
+Additional attributes may be chained on to the end as a hash of key/value pairs
+passed to the attributes method.
+
+
+Example
+=======
+
+class TierSeed < Germinate::Seed
+  # create by name
+  create do |tier|
+    tier.name('Ultra')
+  end
+
+  # update by ID and name
+  update do |tier|
+    tier.id_and_name(1, 'Basic')
+  end
+
+  # create or update by ID
+  create_or_update do |tier|
+    tier.id(1).attributes(:name => 'Standard')
+    tier.id(2).attributes(:name => 'Premium')
+  end
+end
+
+
+Rake Task
+=========
+
+To seed the database, use the included rake task.
+
+  rake db:seed
+
+
+Generator
+=========
+
+There's also a generator called that can be used to generate seed stubs. The
+following will generate a seed for the User model with an entry for a user with
+a username of "admin."
+
+  ./script/generator seed User username:admin
+
+
+Copyright (c) 2008 Tyler Hunt, released under the MIT license
