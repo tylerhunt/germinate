@@ -14,7 +14,7 @@ module Germinate
       end
 
       def method_missing(method, *args)
-        if Germinate::Record::METHODS.include?(method)
+        if Germinate::Record::METHODS.include?(method) && block_given?
           yield Germinate::Factory.new(self, method)
         else
           super
