@@ -1,15 +1,19 @@
+# check for RSpec plugin
+rspec_path = File.join(%W(#{File.dirname(__FILE__)} .. rspec lib))
+$:.unshift(rspec_path) if File.exists?(rspec_path) && !$:.include?(rspec_path)
+
 require 'rake'
-require 'rake/testtask'
 require 'rake/rdoctask'
+require 'spec/rake/spectask'
 
-desc 'Default: run unit tests.'
-task :default => :test
+desc 'Default: run the specs.'
+task :default => :spec
 
-desc 'Test the germinate plugin.'
-Rake::TestTask.new(:test) do |t|
-  t.libs << 'lib'
-  t.pattern = 'test/**/*_test.rb'
-  t.verbose = true
+desc 'Run the specs for the germinate plugin.'
+Spec::Rake::SpecTask.new(:spec) do |t|
+  options_path = File.join(%W(#{File.dirname(__FILE__)} spec spec.opts))
+  t.spec_opts = ['--options', %("#{options_path}")]
+  t.spec_files = FileList['spec/**/*_spec.rb']
 end
 
 desc 'Generate documentation for the germinate plugin.'
