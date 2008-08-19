@@ -4,8 +4,6 @@ module Germinate
 
     attr_accessor :status
 
-    class NotFound < StandardError ; end
-
     def initialize(seed, method, key, *values)
       @seed, @method, @keys, @values = seed, method, key, values
     end
@@ -38,12 +36,14 @@ module Germinate
         raise ActiveRecord::RecordNotFound, "Couldn't find a #{@seed.model.name.downcase} with #{human_key}"
       end
     end
-    private :create
+    private :update
 
     def create_or_update
-      record = find || new
-      record.save!
-      record
+      begin
+        update
+      rescue ActiveRecord::RecordNotFound
+        create
+      end
     end
     private :create_or_update
 
