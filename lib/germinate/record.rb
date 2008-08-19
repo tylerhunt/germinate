@@ -10,7 +10,7 @@ module Germinate
       @seed, @method, @keys, @values = seed, method, key, values
     end
 
-    def attributes(attributes)
+    def with(attributes)
       @attributes = attributes
       self
     end
